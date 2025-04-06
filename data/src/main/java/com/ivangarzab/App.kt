@@ -3,6 +3,7 @@ package com.ivangarzab
 import android.annotation.SuppressLint
 import android.app.Application
 import android.util.Log
+import com.ivangarzab.data.di.dataModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.GlobalContext.startKoin
@@ -28,11 +29,7 @@ class App : Application() {
         startKoin {
             androidLogger()
             androidContext(this@App)
-            modules(
-                listOf(
-                    appModule
-                )
-            )
+            modules(listOf(appModule, dataModule))
         }
     }
 }
