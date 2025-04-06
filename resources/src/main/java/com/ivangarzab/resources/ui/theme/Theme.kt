@@ -1,4 +1,4 @@
-package com.ivangarzab.talk.ui.theme
+package com.ivangarzab.resources.ui.theme
 
 import android.app.Activity
 import android.os.Build
