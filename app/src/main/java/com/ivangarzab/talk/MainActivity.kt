@@ -17,26 +17,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.ivangarzab.data.audio.AudioChunk
-import com.ivangarzab.data.audio.AudioChunksRepository
 import com.ivangarzab.data.course.Course
-import com.ivangarzab.data.course.CourseRepository
 import com.ivangarzab.data.course.Info
 import com.ivangarzab.resources.ui.theme.TalkTheme
-import org.koin.android.ext.android.inject
+import org.koin.androidx.compose.koinViewModel
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-
-        ///////// Move into ViewModel /////////
-        val courseRepository: CourseRepository by inject()
-        val audioChunkRepository: AudioChunksRepository by inject()
-        //////////////////////////////////////
-
         setContent {
             TalkTheme {
-                MainScreenStateful(courseRepository, audioChunkRepository)
+                MainScreenStateful()
             }
         }
     }
@@ -44,11 +36,11 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun MainScreenStateful(
-    courseRepository: CourseRepository,
-    audioChunkRepository: AudioChunksRepository
+    viewModel: MainScreenViewModel = koinViewModel(),
 ) {
-    val courseData by courseRepository.listenForCourseData().collectAsState()
-    val audioChunkData by audioChunkRepository.listenForAudioChunks().collectAsState()
+    val courseData by viewModel.courseData.collectAsState()
+
+    val audioChunkData by viewModel.audioChunksData.collectAsState()
 
     MainScreen(courseData, audioChunkData)
 }
