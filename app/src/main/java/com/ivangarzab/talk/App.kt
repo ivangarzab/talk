@@ -10,6 +10,10 @@ import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.GlobalContext.startKoin
 import timber.log.Timber
 
+/**
+ * The main [Application] class, responsible for initializing the application and
+ * its general dependencies.
+ */
 class App : Application() {
 
     override fun onCreate() {
