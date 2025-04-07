@@ -1,13 +1,13 @@
-package com.ivangarzab
+package com.ivangarzab.talk
 
 import android.annotation.SuppressLint
 import android.app.Application
 import android.util.Log
 import com.ivangarzab.data.di.dataModule
+import com.ivangarzab.talk.di.appModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.GlobalContext.startKoin
-import org.koin.dsl.module
 import timber.log.Timber
 
 class App : Application() {
@@ -32,8 +32,4 @@ class App : Application() {
             modules(listOf(appModule, dataModule))
         }
     }
-}
-
-val appModule = module {
-
 }
