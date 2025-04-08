@@ -2,4 +2,11 @@
 <resources>
 
     <style name="Theme.Talk" parent="android:Theme.Material.Light.NoActionBar" />
+
+    <style name="Theme.Talk.Starting" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/white</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_anim_mark</item>
+        <item name="windowSplashScreenAnimationDuration">1000</item>
+        <item name="postSplashScreenTheme">@style/Theme.Talk</item>
+    </style>
 </resources>
