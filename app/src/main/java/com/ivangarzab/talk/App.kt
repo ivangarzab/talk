@@ -4,7 +4,9 @@ import android.annotation.SuppressLint
 import android.app.Application
 import android.util.Log
 import com.ivangarzab.data.di.dataModule
+import com.ivangarzab.data.network.NetworkRepository
 import com.ivangarzab.talk.di.appModule
+import org.koin.android.ext.android.inject
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.GlobalContext.startKoin
@@ -35,5 +37,12 @@ class App : Application() {
             androidContext(this@App)
             modules(listOf(appModule, dataModule))
         }
+    }
+
+    override fun onTerminate() {
+        super.onTerminate()
+        Timber.v("Application terminating")
+        val networkRepository: NetworkRepository by inject()
+        networkRepository.teardown()
     }
 }

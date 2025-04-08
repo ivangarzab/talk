@@ -5,6 +5,7 @@ import android.net.ConnectivityManager
 import android.net.Network
 import android.net.NetworkCapabilities
 import android.net.NetworkRequest
+import androidx.annotation.VisibleForTesting
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -51,21 +52,25 @@ class NetworkRepository(context: Context) {
         }
     }
 
+    @VisibleForTesting
+    var networkRequestBuilder = NetworkRequest.Builder()
+
+    @VisibleForTesting
+    val networkRequest: NetworkRequest
+
     private var connectivityManager: ConnectivityManager = context.getSystemService(
         Context.CONNECTIVITY_SERVICE
     ) as ConnectivityManager
 
     init {
         startListeningForNetworkChanges()
+        networkRequestBuilder.addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+        networkRequest = networkRequestBuilder.build()
+
     }
 
     private fun startListeningForNetworkChanges() {
-        connectivityManager.registerNetworkCallback(
-            NetworkRequest.Builder().apply {
-                addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
-            }.build(),
-            networkCallback
-        )
+        connectivityManager.registerNetworkCallback(networkRequest, networkCallback)
     }
 
     /**
@@ -75,5 +80,9 @@ class NetworkRepository(context: Context) {
      */
     fun listenForNetworkAvailability(): StateFlow<Boolean> {
         return _networkAvailability.asStateFlow()
+    }
+
+    fun teardown() {
+        connectivityManager.unregisterNetworkCallback(networkCallback)
     }
 }
