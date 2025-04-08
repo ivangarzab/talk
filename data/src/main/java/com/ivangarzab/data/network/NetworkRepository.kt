@@ -63,9 +63,9 @@ class NetworkRepository(context: Context) {
     ) as ConnectivityManager
 
     init {
-        startListeningForNetworkChanges()
         networkRequestBuilder.addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
         networkRequest = networkRequestBuilder.build()
+        startListeningForNetworkChanges()
 
     }
 
