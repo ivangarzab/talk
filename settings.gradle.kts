@@ -22,3 +22,4 @@ dependencyResolutionManagement {
 rootProject.name = "Talk"
 include(":app")
 include(":resources")
+include(":data")
