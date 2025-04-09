@@ -43,14 +43,14 @@ fun MainScreenStateful(
 
     val audioChunkData by viewModel.audioChunksData.collectAsState()
 
-    MainActivityScreen(
+    MainScreen(
         course = courseData,
         audioChunks = audioChunkData
     )
 }
 
 @Composable
-fun MainActivityScreen(
+fun MainScreen(
     modifier: Modifier = Modifier,
     course: Course?,
     audioChunks:List<AudioChunk>
@@ -73,8 +73,8 @@ fun MainActivityScreen(
 
 @Preview
 @Composable
-fun MainActivityScreenPreview() {
-    MainActivityScreen(
+fun MainScreenPreview() {
+    MainScreen(
         course = Course(
             id = "c1",
             Info("Speak", "1", "1", "Take Home Project"),
