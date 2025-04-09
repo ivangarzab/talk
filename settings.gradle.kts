@@ -23,5 +23,8 @@ rootProject.name = "Talk"
 include(":app")
 include(":resources")
 include(":data")
+// features
 include(":course")
 project(":course").projectDir = file("features/course")
+include(":record")
+project(":record").projectDir = file("features/record")
