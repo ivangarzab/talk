@@ -2,7 +2,7 @@ package com.ivangarzab.talk.di
 
 import com.ivangarzab.data.audio.AudioChunksRepository
 import com.ivangarzab.data.course.CourseRepository
-import com.ivangarzab.talk.MainScreenViewModel
+import com.ivangarzab.talk.ui.MainScreenViewModel
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 

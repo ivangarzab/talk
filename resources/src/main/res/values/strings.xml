@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">Talk</string>
+    <string name="no_units_available">No units available</string>
+    <string name="unit_no">Unit %d</string>
+    <string name="day_caps">DAY</string>
+
+    <string name="description_unit_header_icon">Unit header icon</string>
+    <string name="description_course_background_image">Course background image</string>
+    <string name="description_course_thumbnail_image">Course thumbnail image</string>
+    <string name="description_lesson_instructor_image">Lesson instructor image</string>
 </resources>
