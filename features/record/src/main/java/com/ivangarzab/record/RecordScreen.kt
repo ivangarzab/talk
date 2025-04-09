@@ -16,7 +16,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import com.ivangarzab.resources.ui.theme.selectedBlue
 import androidx.compose.ui.res.painterResource
@@ -35,38 +34,35 @@ fun RecordScreen(
     modifier: Modifier = Modifier,
     onRecordClick: () -> Unit
 ) {
-    TalkTheme {
+    Box(
+        modifier = modifier
+            .fillMaxSize()
+            .background(color = MaterialTheme.colorScheme.background)
+    ) {
         Box(
-            modifier = modifier
+            modifier = Modifier
+                .padding(horizontal = 16.dp, vertical = 36.dp)
                 .fillMaxSize()
-                //TODO: The Material colors don't seem to be working!
-                .background(color = Color(0xFFD6D6D6))
+                .background(
+                    color = MaterialTheme.colorScheme.surface,
+                    shape = RoundedCornerShape(16.dp)
+                )
         ) {
-            Box(
+            Text(
                 modifier = Modifier
-                    .padding(horizontal = 16.dp, vertical = 36.dp)
-                    .fillMaxSize()
-                    .background(
-                        color = MaterialTheme.colorScheme.surface,
-                        shape = RoundedCornerShape(16.dp)
-                    )
-            ) {
-                Text(
-                    modifier = Modifier
-                        .padding(top = 128.dp)
-                        .fillMaxWidth()
-                        .align(Alignment.TopCenter),
-                    text = "THIS IS A VERY LONG AND ACCURATE TEST",
-                    style = MaterialTheme.typography.displayLarge,
-                    textAlign = TextAlign.Center
-                )
-                RecordScreenButton(
-                    modifier = Modifier
-                        .padding(bottom = 32.dp)
-                        .align(Alignment.BottomCenter),
-                    onRecordClick = onRecordClick
-                )
-            }
+                    .padding(top = 128.dp)
+                    .fillMaxWidth()
+                    .align(Alignment.TopCenter),
+                text = "THIS IS A VERY LONG AND ACCURATE TEST",
+                style = MaterialTheme.typography.displayLarge,
+                textAlign = TextAlign.Center
+            )
+            RecordScreenButton(
+                modifier = Modifier
+                    .padding(bottom = 32.dp)
+                    .align(Alignment.BottomCenter),
+                onRecordClick = onRecordClick
+            )
         }
     }
 }
@@ -83,7 +79,7 @@ fun RecordScreenButton(
             onClick = { onRecordClick() },
             shape = CircleShape,
             colors = ButtonDefaults.buttonColors(
-                containerColor = Color(0xFFD6D6D6),
+                containerColor = MaterialTheme.colorScheme.background,
                 contentColor = selectedBlue
             )
         ) {
@@ -101,7 +97,9 @@ fun RecordScreenButton(
 @Preview
 @Composable
 fun RecordScreenPreview() {
-    RecordScreen(
-        onRecordClick = { }
-    )
+    TalkTheme(dynamicColor = false) {
+        RecordScreen(
+            onRecordClick = { }
+        )
+    }
 }
