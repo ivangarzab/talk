@@ -22,7 +22,6 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.ivangarzab.course.CourseScreenUnitListDayItem
 import com.ivangarzab.data.course.Day
 import com.ivangarzab.resources.R
 import com.ivangarzab.data.course.Unit as CourseUnit
