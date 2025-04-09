@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
@@ -35,7 +36,7 @@ fun CourseScreenBanner(
     ) {
         AsyncImage(
             modifier = Modifier.fillMaxWidth(),
-            contentDescription = "Course background image",
+            contentDescription = stringResource(id = R.string.description_course_background_image),
             contentScale = ContentScale.Crop,
             model = backgroundImageUrl,
             placeholder = painterResource(id = R.drawable.course_default_header_background_vector),
@@ -47,7 +48,7 @@ fun CourseScreenBanner(
                 .align(Alignment.BottomCenter)
                 .clip(CircleShape)
                 .size(125.dp),
-            contentDescription = "Course thumbnail image",
+            contentDescription = stringResource(id = R.string.description_course_thumbnail_image),
             model = thumbnailImageUrl,
             placeholder = painterResource(id = R.drawable.profile_placeholder),
             error = painterResource(id = R.drawable.profile_placeholder),

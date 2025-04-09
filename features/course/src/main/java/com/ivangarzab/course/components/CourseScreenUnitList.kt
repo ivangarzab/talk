@@ -18,6 +18,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -107,7 +108,7 @@ fun CourseScreenUnitList(
             item {
                 Text(
                     modifier = Modifier.padding(top = 16.dp, bottom = 16.dp),
-                    text = "No units available",
+                    text = stringResource(id = R.string.no_units_available),
                     style = MaterialTheme.typography.titleSmall,
                     fontStyle = FontStyle.Italic
                 )
@@ -127,12 +128,12 @@ fun CourseScreenUnitListHeader(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Image(
-            contentDescription = "Unit header icon",
+            contentDescription = stringResource(id = R.string.description_unit_header_icon),
             painter = painterResource(id = R.drawable.course_unit_default_icon),
         )
         Text(
             modifier = modifier.padding(top = 8.dp),
-            text = "Unit ${index + 1}",
+            text = stringResource(id = R.string.unit_no, index + 1),
             style = MaterialTheme.typography.headlineLarge,
             fontWeight = FontWeight.Bold
         )
