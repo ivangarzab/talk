@@ -35,7 +35,7 @@ fun CourseScreenInfo(
         Text(
             modifier = Modifier.padding(horizontal = 24.dp),
             text = info.title,
-            style = MaterialTheme.typography.displayLarge,
+            style = MaterialTheme.typography.displayMedium,
             textAlign = TextAlign.Center
         )
     }
