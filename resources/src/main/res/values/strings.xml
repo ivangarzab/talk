@@ -8,4 +8,5 @@
     <string name="description_course_background_image">Course background image</string>
     <string name="description_course_thumbnail_image">Course thumbnail image</string>
     <string name="description_lesson_instructor_image">Lesson instructor image</string>
+    <string name="description_record_button">Record button</string>
 </resources>
