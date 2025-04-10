@@ -12,6 +12,10 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
+
+        // Grab the web socket access token from the gradle properties,
+        //  and add it to the :data's BuildConfig file.
+        buildConfigField("String", "WS_ACCESS_TOKEN", properties["WS_ACCESS_TOKEN"].toString())
     }
 
     buildTypes {
@@ -30,12 +34,19 @@ android {
     kotlinOptions {
         jvmTarget = "11"
     }
+    buildFeatures {
+        buildConfig = true
+    }
 }
 
 dependencies {
     implementation(libs.gson)
     implementation(libs.timber)
     implementation(libs.koin)
+
+    implementation(platform(libs.okhttp.bom))
+    implementation(libs.okhttp)
+    implementation(libs.logging.interceptor)
 
     testImplementation(libs.junit)
     testImplementation(libs.mockk)
