@@ -74,12 +74,15 @@ fun MainScreen(
 @Preview
 @Composable
 fun MainScreenPreview() {
-    MainScreen(
-        course = Course(
-            id = "c1",
-            Info("Speak", "1", "1", "Take Home Project"),
-            listOf()
-        ),
-        audioChunks = listOf()
-    )
+    TalkTheme {
+        MainScreen(
+            modifier = Modifier.fillMaxSize(),
+            course = Course(
+                id = "c1",
+                Info("Speak", "1", "1", "Take Home Project"),
+                listOf()
+            ),
+            onUnitDayClick = { }
+        )
+    }
 }
