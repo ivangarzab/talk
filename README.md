@@ -1,5 +1,7 @@
 # Speak Take-home Project
 
+[Skip to Setup Instructions](#how-to-set-up--run)
+
 The purpose of this repository is to create a simple app that consists of two main screens: `CourseScreen` & `RecordScreen`.
 
 The `CourseScreen` shows the `Course` data, which includes title and subtitle, thumbnail image of the user, as well as a list of units and their respective day lessons.  Additionally, the lessons are connected by a timeline stating which days they belong to.  
