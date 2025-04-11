@@ -1,6 +1,5 @@
 package com.ivangarzab.talk.di
 
-import com.ivangarzab.data.audio.AudioChunksRepository
 import com.ivangarzab.data.course.CourseRepository
 import com.ivangarzab.talk.ui.MainScreenViewModel
 import org.koin.core.module.dsl.viewModel
@@ -12,8 +11,7 @@ import org.koin.dsl.module
 val appModule = module {
     viewModel {
         MainScreenViewModel(
-            courseRepository = get(CourseRepository::class),
-            audioChunksRepository = get(AudioChunksRepository::class)
+            courseRepository = get(CourseRepository::class)
         )
     }
 }

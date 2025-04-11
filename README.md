@@ -13,3 +13,8 @@ The purpose of this repository is to
 ## Time-constrained Trade-offs
 
 ## Moving Forward
+
+------------------
+## Setup
+Before building the project, add the following to your global gradle.properties file
+(located at ~/.gradle/gradle.properties):

@@ -1,10 +1,11 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.compose)
 }
 
 android {
-    namespace = "com.ivangarzab.data"
+    namespace = "com.ivangarzab.record"
     compileSdk = 35
 
     defaultConfig {
@@ -12,10 +13,6 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
-
-        // Grab the web socket access token from the gradle properties,
-        //  and add it to the :data's BuildConfig file.
-        buildConfigField("String", "WS_ACCESS_TOKEN", properties["WS_ACCESS_TOKEN"].toString())
     }
 
     buildTypes {
@@ -35,22 +32,31 @@ android {
         jvmTarget = "11"
     }
     buildFeatures {
-        buildConfig = true
+        compose = true
     }
 }
 
 dependencies {
-    implementation(libs.gson)
+
+    implementation(project(":resources"))
+    implementation(project(":data"))
+
+    implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.lifecycle.runtime.ktx)
+    implementation(libs.androidx.activity.compose)
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.ui)
+    implementation(libs.androidx.ui.graphics)
+    implementation(libs.androidx.ui.tooling.preview)
+    implementation(libs.androidx.material3)
+    implementation(libs.androidx.constraintlayout)
+
     implementation(libs.timber)
     implementation(libs.koin)
-
-    implementation(platform(libs.okhttp.bom))
-    implementation(libs.okhttp)
-    implementation(libs.logging.interceptor)
+    implementation(libs.koin.compose)
 
     testImplementation(libs.junit)
-    testImplementation(libs.mockk)
-    testImplementation(libs.koin.test)
-    testImplementation(libs.kotlinx.coroutines.test)
     androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.androidx.espresso.core)
+    debugImplementation(libs.ui.tooling)
 }
