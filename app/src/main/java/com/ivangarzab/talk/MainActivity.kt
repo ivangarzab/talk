@@ -1,4 +1,4 @@
-package com.ivangarzab.talk.ui
+package com.ivangarzab.talk
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -22,6 +22,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.ivangarzab.course.CourseScreen
+import com.ivangarzab.course.CourseViewModel
 import com.ivangarzab.record.RecordScreen
 import com.ivangarzab.record.RecordViewModel
 import com.ivangarzab.resources.ui.theme.TalkTheme
@@ -61,15 +62,16 @@ fun MainNavHost(
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController()
 ) {
-    val viewModel: MainScreenViewModel = koinViewModel()
-
     NavHost(
         navController = navController,
         startDestination = NavRoutes.COURSE,
         modifier = modifier
     ) {
+        // CourseScreen stateful definition
         composable(NavRoutes.COURSE) {
-            val courseData by viewModel.courseData.collectAsState()
+            val courseViewModel: CourseViewModel = koinViewModel()
+
+            val courseData by courseViewModel.courseData.collectAsState()
 
             courseData?.let { course ->
                 CourseScreen(
@@ -81,6 +83,7 @@ fun MainNavHost(
             }
         }
 
+        // RecordScreen stateful definition
         composable(
             route = "${NavRoutes.RECORD}/{dayId}",
             arguments = listOf(navArgument("dayId") { type = NavType.StringType })
