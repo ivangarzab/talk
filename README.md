@@ -1,3 +1,5 @@
+[![Build Check](https://github.com/ivangarzab/talk/actions/workflows/build.yml/badge.svg?branch=main)](https://github.com/ivangarzab/talk/actions/workflows/build.yml)
+
 # Speak Take-Home Project
 
 [Skip to Setup Instructions](#how-to-set-up--run)
