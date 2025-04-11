@@ -16,7 +16,8 @@ import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
 /**
- * TODO:
+ * The purpose of this repository is to handle the [WebSocket] connection that is used to
+ * send and receive data from the backend server, regarding the record feature.
  */
 class WebSocketRepository {
 
@@ -74,6 +75,10 @@ class WebSocketRepository {
         }.build()
     }
 
+    /**
+     * Open a [WebSocket] for the [WEB_SOCKET_URL], using the predefined [okHttpClient]
+     * and [webSocketRequest] to establish a connection.
+     */
     suspend fun openWebSocket() {
         Timber.v("Attempting to open web socket for url: $WEB_SOCKET_URL")
         webSocket = okHttpClient.newWebSocket(webSocketRequest, webSocketListener)
@@ -90,14 +95,14 @@ class WebSocketRepository {
     }
 
     /**
-     * TODO:
+     * Consume a [StateFlow] of a list of [WebSocketResponse].
      */
     fun listenForWebSocketResponses(): StateFlow<List<WebSocketResponse>> {
         return _webSocketResponses.asStateFlow()
     }
 
     /**
-     * TODO:
+     * Send a message to the web socket to indicate the backend that we want to star recording.
      */
     @SuppressLint("DefaultLocale")
     suspend fun sendStartStreamingMessage(learningLocale: String = "en-US", inputSampleRate: Int = 16000) {
@@ -108,7 +113,7 @@ class WebSocketRepository {
     }
 
     /**
-     * TODO:
+     * Send an [AudioChunk] to the web socket for backend processing.
      */
     suspend fun sendAudioDataChunkMessage(audioChunk: AudioChunk) {
         webSocket?.let { ws ->
@@ -119,10 +124,6 @@ class WebSocketRepository {
 //                ws.close(1000, "We're done streaming") TODO: Close once we get the 'closing' message
             }
         } ?: Timber.w("Unable to send audio data chunk message as web socket is null")
-    }
-
-    suspend fun sendStopStreamingMessage() {
-        sendAudioDataChunkMessage(AudioChunk(type = "asrStream", chunk = "", isFinal = true))
     }
 
     companion object {

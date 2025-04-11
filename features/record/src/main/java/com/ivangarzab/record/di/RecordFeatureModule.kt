@@ -7,7 +7,7 @@ import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 
 /**
- *
+ * [org.koin.core.Koin] dependency module for injection of the record feature.
  */
 val recordFeatureModule = module {
     viewModel {

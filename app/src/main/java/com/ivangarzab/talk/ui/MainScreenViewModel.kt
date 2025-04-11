@@ -4,11 +4,11 @@ import androidx.lifecycle.ViewModel
 import com.ivangarzab.data.course.CourseRepository
 
 /**
- * This [ViewModel] is responsible for managing the business logic of the [com.ivangarzab.talk.ui.MainScreen].
+ * This [ViewModel] is responsible for managing the business logic
+ * of the [com.ivangarzab.talk.ui.MainActivity].
  */
 class MainScreenViewModel(
     courseRepository: CourseRepository
 ) : ViewModel() {
-
     val courseData = courseRepository.listenForCourseData()
 }

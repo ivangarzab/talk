@@ -51,7 +51,7 @@ fun RecordScreen(
                             .padding(start = 16.dp, end = 16.dp, bottom = 150.dp)
                             .fillMaxWidth()
                             .align(Alignment.BottomCenter),
-                        text = "Tap the record button to start!",
+                        text = "Tap the record button to start",
                         style = MaterialTheme.typography.displaySmall,
                         color = MaterialTheme.colorScheme.onSurface,
                         fontStyle = FontStyle.Italic,
