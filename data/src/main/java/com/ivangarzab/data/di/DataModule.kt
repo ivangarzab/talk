@@ -23,8 +23,7 @@ val dataModule = module {
     single { CoroutineScope(SupervisorJob() + Dispatchers.IO) }
     single { JsonLoader(get(Context::class)) }
     // network data
-    factory { NetworkRepository(get(Context::class)) }
-//    factory { WebSocketRepositoryImpl() }
+    single { NetworkRepository(get(Context::class)) }
     single<WebSocketRepository> {
         WebSocketRepositoryImpl()
     }

@@ -1,5 +1,7 @@
 package com.ivangarzab.data.audio
 
+import com.ivangarzab.websocket.models.AudioChunk
+
 /**
  * The purpose of this class is to handle the local data source operations for [AudioChunk].
  *
@@ -13,7 +15,7 @@ class AudioChunksLocalDataSource {
      *
      * For this project, this will simply leave this function stubbed.
      */
-    suspend fun getAudioChunks(): List<com.ivangarzab.websocket.models.AudioChunk> {
+    suspend fun getAudioChunks(): List<AudioChunk> {
         // stubbed
         return listOf()
     }

@@ -1,6 +1,7 @@
 package com.ivangarzab.data.audio
 
 import com.ivangarzab.data.network.NetworkRepository
+import com.ivangarzab.websocket.models.AudioChunk
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -19,7 +20,7 @@ class AudioChunksRepository(
     coroutineScope: CoroutineScope
 ) {
 
-    private val _audioChunks = MutableStateFlow<List<com.ivangarzab.websocket.models.AudioChunk>>(listOf())
+    private val _audioChunks = MutableStateFlow<List<AudioChunk>>(listOf())
 
     init {
         Timber.v("Initializing AudioChunksRepository")
@@ -37,7 +38,7 @@ class AudioChunksRepository(
     /**
      * Consume a [StateFlow] of [List] of [AudioChunk] data.
      */
-    fun listenForAudioChunks(): StateFlow<List<com.ivangarzab.websocket.models.AudioChunk>> {
+    fun listenForAudioChunks(): StateFlow<List<AudioChunk>> {
         return _audioChunks.asStateFlow()
     }
 }

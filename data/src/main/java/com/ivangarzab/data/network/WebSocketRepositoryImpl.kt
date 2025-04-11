@@ -5,6 +5,8 @@ import com.google.gson.Gson
 import com.ivangarzab.data.BuildConfig
 import com.ivangarzab.websocket.repositories.WebSocketRepository
 import com.ivangarzab.websocket.models.AudioChunk
+import com.ivangarzab.websocket.models.WebSocketResponse
+import com.ivangarzab.websocket.models.WebSocketResponseType
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -29,7 +31,7 @@ class WebSocketRepositoryImpl : WebSocketRepository {
 
     private var webSocket: WebSocket? = null
 
-    private val _webSocketResponses: MutableStateFlow<List<com.ivangarzab.websocket.models.WebSocketResponse>> = MutableStateFlow(emptyList())
+    private val _webSocketResponses: MutableStateFlow<List<WebSocketResponse>> = MutableStateFlow(emptyList())
 
     private val webSocketListener: WebSocketListener = object : WebSocketListener() {
         override fun onOpen(webSocket: WebSocket, response: okhttp3.Response) {
@@ -77,28 +79,28 @@ class WebSocketRepositoryImpl : WebSocketRepository {
     }
 
     /**
-     * Decipher the raw [com.ivangarzab.websocket.models.WebSocketResponse] from the provided text
+     * Decipher the raw [WebSocketResponse] from the provided text
      * using [Gson], and update the internal [_webSocketResponses] state with the parsed response.
      */
     private fun onWebSocketRawResponseReceived(text: String) {
-        val response = Gson().fromJson(text, com.ivangarzab.websocket.models.WebSocketResponse::class.java)
+        val response = Gson().fromJson(text, WebSocketResponse::class.java)
         handleWebSocketResponse(response)
     }
 
-    private fun handleWebSocketResponse(response: com.ivangarzab.websocket.models.WebSocketResponse) {
+    private fun handleWebSocketResponse(response: WebSocketResponse) {
         when (response.type) {
-            com.ivangarzab.websocket.models.WebSocketResponseType.METADATA -> {
+            WebSocketResponseType.METADATA -> {
                 Timber.v("Received START response from web socket")
                 // We could send back a signal to indicate that we can/should
                 //  start sending audio chunks.
             }
 
-            com.ivangarzab.websocket.models.WebSocketResponseType.RESULT -> {
+            WebSocketResponseType.RESULT -> {
                 Timber.v("Received RESULT response from web socket")
                 _webSocketResponses.value += response
             }
 
-            com.ivangarzab.websocket.models.WebSocketResponseType.CLOSED -> {
+            WebSocketResponseType.CLOSED -> {
                 Timber.v("Received CLOSED response from web socket")
                 webSocket?.close(
                     1000,
@@ -109,9 +111,9 @@ class WebSocketRepositoryImpl : WebSocketRepository {
     }
 
     /**
-     * Consume a [StateFlow] of a list of [com.ivangarzab.websocket.models.WebSocketResponse].
+     * Consume a [StateFlow] of a list of [WebSocketResponse].
      */
-    override fun listenForWebSocketResponses(): StateFlow<List<com.ivangarzab.websocket.models.WebSocketResponse>> {
+    override fun listenForWebSocketResponses(): StateFlow<List<WebSocketResponse>> {
         return _webSocketResponses.asStateFlow()
     }
 
@@ -138,7 +140,7 @@ class WebSocketRepositoryImpl : WebSocketRepository {
     /**
      * Send an [AudioChunk] to the web socket for backend processing.
      */
-    override suspend fun sendAudioDataChunkMessage(audioChunk: com.ivangarzab.websocket.models.AudioChunk) {
+    override suspend fun sendAudioDataChunkMessage(audioChunk: AudioChunk) {
         webSocket?.let { ws ->
             ws.send(String.format(AUDIO_CHUNK_MESSAGE, audioChunk.chunk, audioChunk.isFinal))
             if (audioChunk.isFinal) {

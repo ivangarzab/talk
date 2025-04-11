@@ -1,5 +1,6 @@
 package com.ivangarzab.data.audio
 
+import com.ivangarzab.websocket.models.AudioChunk
 import io.mockk.MockKAnnotations
 import junit.framework.TestCase.assertEquals
 import kotlinx.coroutines.runBlocking
@@ -27,6 +28,6 @@ class AudioChunksLocalDataSourceTest {
         val result = audioChunksLocalDataSource.getAudioChunks()
 
         // Then
-        assertEquals(emptyList<com.ivangarzab.websocket.models.AudioChunk>(), result)
+        assertEquals(emptyList<AudioChunk>(), result)
     }
 }

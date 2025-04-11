@@ -1,6 +1,7 @@
 package com.ivangarzab.data.audio
 
 import com.ivangarzab.data.network.NetworkRepository
+import com.ivangarzab.websocket.models.AudioChunk
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
@@ -34,13 +35,13 @@ class AudioChunksRepositoryTest {
     private val networkAvailabilityFlow = MutableStateFlow(false)
 
     private val remoteAudioChunks = listOf(
-        com.ivangarzab.websocket.models.AudioChunk("asrStream", "ABCDEFGH123456", false),
-        com.ivangarzab.websocket.models.AudioChunk("asrStream", "IJKLMNOPQR7890", false)
+        AudioChunk("asrStream", "ABCDEFGH123456", false),
+        AudioChunk("asrStream", "IJKLMNOPQR7890", false)
     )
 
     private val localAudioChunks = listOf(
-        com.ivangarzab.websocket.models.AudioChunk("asrStream", "ABCDEFGH123456", false),
-        com.ivangarzab.websocket.models.AudioChunk("asrStream", "IJKLMNOPQR7890", false)
+        AudioChunk("asrStream", "ABCDEFGH123456", false),
+        AudioChunk("asrStream", "IJKLMNOPQR7890", false)
     )
 
     // System under test

@@ -3,6 +3,7 @@ package com.ivangarzab.data.audio
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.ivangarzab.data.util.JsonLoader
+import com.ivangarzab.websocket.models.AudioChunk
 
 /**
  * The purpose of this class is to handle remote data source operations for [AudioChunk].
@@ -19,9 +20,9 @@ class AudioChunksRemoteDataSource(
      *
      * For this project, this will be loaded from a local JSON file named [FILENAME].
      */
-    suspend fun getAudioChunks(): List<com.ivangarzab.websocket.models.AudioChunk> {
+    suspend fun getAudioChunks(): List<AudioChunk> {
         val jsonData: String = jsonLoader.loadJsonFromResources(FILENAME)
-        val audioChunkListType = object : TypeToken<List<com.ivangarzab.websocket.models.AudioChunk>>() {}.type
+        val audioChunkListType = object : TypeToken<List<AudioChunk>>() {}.type
         return Gson().fromJson(jsonData, audioChunkListType)
     }
 
