@@ -23,6 +23,9 @@ rootProject.name = "Talk"
 include(":app")
 include(":resources")
 include(":data")
+//domain
+include("domain:websocket")
+project(":domain:websocket").projectDir = file("domain/websocket")
 // features
 include(":feature:course")
 project(":feature:course").projectDir = file("features/course")

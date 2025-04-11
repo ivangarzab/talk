@@ -13,7 +13,7 @@ class AudioChunksLocalDataSource {
      *
      * For this project, this will simply leave this function stubbed.
      */
-    suspend fun getAudioChunks(): List<AudioChunk> {
+    suspend fun getAudioChunks(): List<com.ivangarzab.websocket.models.AudioChunk> {
         // stubbed
         return listOf()
     }

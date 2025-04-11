@@ -34,13 +34,13 @@ class AudioChunksRepositoryTest {
     private val networkAvailabilityFlow = MutableStateFlow(false)
 
     private val remoteAudioChunks = listOf(
-        AudioChunk("asrStream", "ABCDEFGH123456", false),
-        AudioChunk("asrStream", "IJKLMNOPQR7890", false)
+        com.ivangarzab.websocket.models.AudioChunk("asrStream", "ABCDEFGH123456", false),
+        com.ivangarzab.websocket.models.AudioChunk("asrStream", "IJKLMNOPQR7890", false)
     )
 
     private val localAudioChunks = listOf(
-        AudioChunk("asrStream", "ABCDEFGH123456", false),
-        AudioChunk("asrStream", "IJKLMNOPQR7890", false)
+        com.ivangarzab.websocket.models.AudioChunk("asrStream", "ABCDEFGH123456", false),
+        com.ivangarzab.websocket.models.AudioChunk("asrStream", "IJKLMNOPQR7890", false)
     )
 
     // System under test

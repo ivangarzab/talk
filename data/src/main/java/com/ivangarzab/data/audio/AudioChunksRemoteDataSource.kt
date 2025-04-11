@@ -19,9 +19,9 @@ class AudioChunksRemoteDataSource(
      *
      * For this project, this will be loaded from a local JSON file named [FILENAME].
      */
-    suspend fun getAudioChunks(): List<AudioChunk> {
+    suspend fun getAudioChunks(): List<com.ivangarzab.websocket.models.AudioChunk> {
         val jsonData: String = jsonLoader.loadJsonFromResources(FILENAME)
-        val audioChunkListType = object : TypeToken<List<AudioChunk>>() {}.type
+        val audioChunkListType = object : TypeToken<List<com.ivangarzab.websocket.models.AudioChunk>>() {}.type
         return Gson().fromJson(jsonData, audioChunkListType)
     }
 

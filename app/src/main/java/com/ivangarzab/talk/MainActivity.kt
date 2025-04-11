@@ -87,7 +87,7 @@ fun MainNavHost(
             route = "${NavRoutes.RECORD}/{dayId}",
             arguments = listOf(navArgument("dayId") { type = NavType.StringType })
         ) { backStackEntry ->
-            // In the real app, we would use the Day param for something.
+            //TODO: In the real app, we would use the Day param for something
             val dayId = backStackEntry.arguments?.getString("dayId") ?: ""
 
             val recordViewModel: RecordViewModel = koinViewModel()

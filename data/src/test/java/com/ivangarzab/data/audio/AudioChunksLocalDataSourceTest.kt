@@ -27,6 +27,6 @@ class AudioChunksLocalDataSourceTest {
         val result = audioChunksLocalDataSource.getAudioChunks()
 
         // Then
-        assertEquals(emptyList<AudioChunk>(), result)
+        assertEquals(emptyList<com.ivangarzab.websocket.models.AudioChunk>(), result)
     }
 }

@@ -1,4 +1,4 @@
-package com.ivangarzab.data.audio
+package com.ivangarzab.websocket.models
 
 /**
  * The purpose of this file is to hold all of the data classes that are required

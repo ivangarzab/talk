@@ -7,6 +7,7 @@ import com.ivangarzab.course.di.courseFeatureModule
 import com.ivangarzab.data.di.dataModule
 import com.ivangarzab.data.network.NetworkRepository
 import com.ivangarzab.record.di.recordFeatureModule
+import com.ivangarzab.websocket.di.webSocketDomainModule
 import org.koin.android.ext.android.inject
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
@@ -36,7 +37,13 @@ class App : Application() {
         startKoin {
             androidLogger()
             androidContext(this@App)
-            modules(listOf(dataModule, courseFeatureModule, recordFeatureModule))
+            modules(
+                listOf(
+                    dataModule, // data layer
+                    webSocketDomainModule, // domain layer
+                    courseFeatureModule, recordFeatureModule // app layer
+                )
+            )
         }
     }
 

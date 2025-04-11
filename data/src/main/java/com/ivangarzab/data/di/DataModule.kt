@@ -9,7 +9,8 @@ import com.ivangarzab.data.course.CourseRemoteDataSource
 import com.ivangarzab.data.course.CourseRepository
 import com.ivangarzab.data.util.JsonLoader
 import com.ivangarzab.data.network.NetworkRepository
-import com.ivangarzab.data.network.WebSocketRepository
+import com.ivangarzab.data.network.WebSocketRepositoryImpl
+import com.ivangarzab.websocket.repositories.WebSocketRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -23,7 +24,10 @@ val dataModule = module {
     single { JsonLoader(get(Context::class)) }
     // network data
     factory { NetworkRepository(get(Context::class)) }
-    factory { WebSocketRepository() }
+//    factory { WebSocketRepositoryImpl() }
+    single<WebSocketRepository> {
+        WebSocketRepositoryImpl()
+    }
     // Course data
     single { CourseRemoteDataSource(get(JsonLoader::class)) }
     single { CourseLocalDataSource() }

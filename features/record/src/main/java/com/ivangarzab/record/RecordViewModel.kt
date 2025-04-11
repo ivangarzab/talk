@@ -3,8 +3,11 @@ package com.ivangarzab.record
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ivangarzab.data.audio.AudioChunksRepository
-import com.ivangarzab.data.network.WebSocketRepository
-import com.ivangarzab.data.network.WebSocketResponse
+import com.ivangarzab.data.network.WebSocketRepositoryImpl
+import com.ivangarzab.websocket.models.WebSocketResponse
+import com.ivangarzab.websocket.usecases.ObserveWebSocketResponseUseCase
+import com.ivangarzab.websocket.usecases.SendAudioChunkUseCase
+import com.ivangarzab.websocket.usecases.StartWebSocketUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -17,24 +20,23 @@ import timber.log.Timber
  */
 class RecordViewModel(
     audioChunksRepository: AudioChunksRepository,
-    private val webSocketRepository: WebSocketRepository
+    observeWebSocketResponseUseCase: ObserveWebSocketResponseUseCase,
+    val startWebSocketUseCase: StartWebSocketUseCase,
+    val sendAudioChunkUseCase: SendAudioChunkUseCase
 ) : ViewModel() {
 
     private val audioChunksData = audioChunksRepository.listenForAudioChunks()
 
-    private val webSocketResponsesData = webSocketRepository.listenForWebSocketResponses()
+    private val webSocketResponsesData = observeWebSocketResponseUseCase()
 
     private val _responseText: MutableStateFlow<String> = MutableStateFlow("")
     val responseText: StateFlow<String> = _responseText
 
     fun startListeningForTextResponses() {
         viewModelScope.launch(Dispatchers.Default) {
-            // Open the web socket
-            webSocketRepository.openWebSocket()
-            // Send the 'start' message
-            webSocketRepository.sendStartStreamingMessage(learningLocale = "en-US") // Using default inputSampleRate
+            startWebSocketUseCase(learningLocale = "en-US") // Using default inputSampleRate
             for (audioChunk in audioChunksData.value) {
-                webSocketRepository.sendAudioDataChunkMessage(audioChunk)
+                sendAudioChunkUseCase(audioChunk)
             }
         }
         viewModelScope.launch(Dispatchers.Default) {
