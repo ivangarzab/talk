@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
@@ -23,11 +24,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.ivangarzab.data.course.Course
 import com.ivangarzab.resources.ui.theme.TalkTheme
 import com.ivangarzab.resources.R as R
 
 /**
- * TODO:
+ * The purpose of this composable is to serve as the main entry point for displaying
+ *  and interacting with the recording screen.
  */
 @Composable
 fun RecordScreen(
@@ -36,6 +39,7 @@ fun RecordScreen(
 ) {
     Box(
         modifier = modifier
+            .statusBarsPadding()
             .fillMaxSize()
             .background(color = MaterialTheme.colorScheme.background)
     ) {
