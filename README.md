@@ -59,6 +59,26 @@ For the `data` layer, I decided to use a monolithic Gradle module containing *al
 
 In a bigger or more fleshed out application, we could further break down this monolith into individual Gradle modules in order to make a steeper separation of concerns, and to leverage Gradle's incremental build system even better.
 
+### About Gradle
+
+So far, I have been mostly describing the **Logical Architecture** that I've employed, based on Android's latest and recommended patterns.
+
+However, the Gradle multi-module architecture does not follow these same principles.  Gradle, on the other hand, utilizes a Clean Architecture pattern that organizes the different modules in a way that supports the **Logical Architecture** that's been already defined.
+
+In the Gradle architecture, the `:app` module may depend on any number of other modules; `:feature` modules depend on `:domain` modules, and maybe the `:data` module as well; and finally, the `:data` module depends on the `:domain` modules.
+
+Therefore, the hierarchy of the Gradle Multi-Module Architecture looks more like this:
+
+```
+:app
+├──> :features
+│    └──> :domain
+│    └──> :data (optional)
+├──> :data
+│    └──> :domain
+└──> :domain
+```
+
 ## UI/UX
 
 When it comes to the UI/UX, I attempted to recreate the screens that were given to me to the best of my ability, using simple screenshots only.  
