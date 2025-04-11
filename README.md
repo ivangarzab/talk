@@ -1,4 +1,4 @@
-# Speak Take-home Project
+# Speak Take-Home Project
 
 [Skip to Setup Instructions](#how-to-set-up--run)
 
@@ -133,7 +133,7 @@ Plug-in a physical Android device, or boot up an Emulator that supports at least
 ## Step 1: Clone the Repository
 
 ```bash
-git clone https://github.com/ivangazab/talk.git
+git clone https://github.com/ivangarzab/talk.git
 cd talk
 ```
 
