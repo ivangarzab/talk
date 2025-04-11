@@ -33,12 +33,12 @@ class WebSocketRepository {
     private val webSocketListener: WebSocketListener = object : WebSocketListener() {
         override fun onOpen(webSocket: WebSocket, response: okhttp3.Response) {
             super.onOpen(webSocket, response)
-            Timber.d("Web socket connection established successfully")
+            Timber.v("Web socket connection established successfully")
         }
 
         override fun onMessage(webSocket: WebSocket, text: String) {
             super.onMessage(webSocket, text)
-            Timber.i("Received message from web socket: $text")
+            Timber.v("Received message from web socket: $text")
             onWebSocketRawResponseReceived(text)
         }
 
@@ -49,24 +49,24 @@ class WebSocketRepository {
 
         override fun onClosing(webSocket: WebSocket, code: Int, reason: String) {
             super.onClosing(webSocket, code, reason)
-            Timber.d("Web socket connection is closing with code: $code and reason: $reason")
-            webSocket.close(1000, null)
+            Timber.v("Web socket connection is closing with code: $code and reason: $reason")
+            webSocket.close(1000, reason)
         }
 
         override fun onClosed(webSocket: WebSocket, code: Int, reason: String) {
             super.onClosed(webSocket, code, reason)
-            Timber.d("Web socket connection closed with code: $code and reason: $reason")
+            Timber.v("Web socket connection closed with code: $code and reason: $reason")
         }
 
         override fun onFailure(webSocket: WebSocket, t: Throwable, response: okhttp3.Response?) {
             super.onFailure(webSocket, t, response)
-                Timber.w(t, "Failed to open web socket with error: ${t.cause} and response: $response")
+            Timber.w(t, "Failed to open web socket with error: ${t.cause} and response: $response")
         }
     }
 
     init {
         okHttpClient = OkHttpClient.Builder().apply {
-            pingInterval(10, TimeUnit.SECONDS)
+            pingInterval(PING_INTERVAL_MIN, TimeUnit.SECONDS)
         }.build()
         webSocketRequest = Request.Builder().apply {
             url(WEB_SOCKET_URL)
@@ -90,8 +90,30 @@ class WebSocketRepository {
      */
     private fun onWebSocketRawResponseReceived(text: String) {
         val response = Gson().fromJson(text, WebSocketResponse::class.java)
-        Timber.d("Updating internal state with new web socket response: $response")
-        _webSocketResponses.value += response
+        handleWebSocketResponse(response)
+    }
+
+    private fun handleWebSocketResponse(response: WebSocketResponse) {
+        when (response.type) {
+            WebSocketResponseType.METADATA -> {
+                Timber.v("Received START response from web socket")
+                // We could send back a signal to indicate that we can/should
+                //  start sending audio chunks.
+            }
+
+            WebSocketResponseType.RESULT -> {
+                Timber.v("Received RESULT response from web socket")
+                _webSocketResponses.value += response
+            }
+
+            WebSocketResponseType.CLOSED -> {
+                Timber.v("Received CLOSED response from web socket")
+                webSocket?.close(
+                    1000,
+                    "Web socket connection closed after end of stream."
+                )
+            }
+        }
     }
 
     /**
@@ -106,9 +128,9 @@ class WebSocketRepository {
      */
     @SuppressLint("DefaultLocale")
     suspend fun sendStartStreamingMessage(learningLocale: String = "en-US", inputSampleRate: Int = 16000) {
-        webSocket?.let {
-            it.send(String.format(START_MESSAGE, learningLocale, inputSampleRate))
-            Timber.d("Start message sent to web socket with learning locale: $learningLocale and input sample rate: $inputSampleRate")
+        webSocket?.let { ws ->
+            ws.send(String.format(START_MESSAGE, learningLocale, inputSampleRate))
+            Timber.v("Start message sent to web socket with learning locale: $learningLocale and input sample rate: $inputSampleRate")
         } ?: Timber.w("Unable to send start streaming message as web socket is null")
     }
 
@@ -118,15 +140,15 @@ class WebSocketRepository {
     suspend fun sendAudioDataChunkMessage(audioChunk: AudioChunk) {
         webSocket?.let { ws ->
             ws.send(String.format(AUDIO_CHUNK_MESSAGE, audioChunk.chunk, audioChunk.isFinal))
-            Timber.d("Audio data chunk message sent to web socket with chunk length: ${audioChunk.chunk.length} and isFinal: ${audioChunk.isFinal}")
             if (audioChunk.isFinal) {
-                Timber.d("Final audio chunk sent to web socket")
-//                ws.close(1000, "We're done streaming") TODO: Close once we get the 'closing' message
+                Timber.v("Final audio chunk sent to web socket")
             }
         } ?: Timber.w("Unable to send audio data chunk message as web socket is null")
     }
 
     companion object {
+        private const val PING_INTERVAL_MIN: Long = 10
+
         private const val WEB_SOCKET_URL = "wss://speak-api--feature-mobile-websocket-interview.preview.usespeak.dev/v2/ws"
 
         private const val HEADER_ACCESS_TOKEN = "x-access-token"

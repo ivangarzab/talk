@@ -21,10 +21,21 @@ data class WebSocketResponseSegment(
 )
 
 enum class WebSocketResponseType {
+    /**
+     * Response type indicating that the recording session has started.
+     */
     @SerializedName("asrMetadata")
     METADATA,
+
+    /**
+     * Response type containing the transcription result of the audio recording.
+     */
     @SerializedName("asrResult")
     RESULT,
+
+    /**
+     * Response type indicating that the recording session has been finished and closed.
+     */
     @SerializedName("asrClosed")
     CLOSED
 }

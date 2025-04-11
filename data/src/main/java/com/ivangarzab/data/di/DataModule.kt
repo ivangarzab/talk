@@ -23,7 +23,7 @@ val dataModule = module {
     single { JsonLoader(get(Context::class)) }
     // network data
     factory { NetworkRepository(get(Context::class)) }
-    single { WebSocketRepository() }
+    factory { WebSocketRepository() }
     // Course data
     single { CourseRemoteDataSource(get(JsonLoader::class)) }
     single { CourseLocalDataSource() }
