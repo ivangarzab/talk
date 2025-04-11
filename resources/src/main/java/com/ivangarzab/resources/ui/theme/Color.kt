@@ -15,7 +15,7 @@ val Pink40 = Color(0xFF7D5260)
 // Colors in use
 val selectedBlue = Color(0xFF2847F5)
 
-val lightBackground = Color(0xFFD6D6D6)
+val lightBackground = Color(0xFFF0F0F0)
 val lightSurface = Color(0xFFFFFFFF)
 val lightSurfaceAlt = Color(0xFFEEEEEE)
 val lightText = Color(0xFF000000)
