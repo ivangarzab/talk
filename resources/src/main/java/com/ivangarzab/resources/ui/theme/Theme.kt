@@ -49,7 +49,6 @@ fun TalkTheme(
     }
 
     MaterialTheme(
-        //TODO: The Material colors don't seem to be working!
         colorScheme = colorScheme,
         typography = defaultTypography(darkTheme),
         content = content
