@@ -1,41 +1,33 @@
 package com.ivangarzab.record
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.ColorFilter
-import com.ivangarzab.resources.ui.theme.selectedBlue
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.ivangarzab.data.course.Course
+import com.ivangarzab.record.components.RecordScreenButton
 import com.ivangarzab.resources.ui.theme.TalkTheme
-import com.ivangarzab.resources.R as R
 
 /**
  * The purpose of this composable is to serve as the main entry point for displaying
- *  and interacting with the recording screen.
+ * and interacting with the recording screen.
  */
 @Composable
 fun RecordScreen(
     modifier: Modifier = Modifier,
-    onRecordClick: () -> Unit
+    responseText: String = "",
+    onRecordButtonClicked: () -> Unit
 ) {
     Box(
         modifier = modifier
@@ -52,47 +44,37 @@ fun RecordScreen(
                     shape = RoundedCornerShape(16.dp)
                 )
         ) {
-            Text(
-                modifier = Modifier
-                    .padding(top = 128.dp)
-                    .fillMaxWidth()
-                    .align(Alignment.TopCenter),
-                text = "THIS IS A VERY LONG AND ACCURATE TEST",
-                style = MaterialTheme.typography.displayLarge,
-                textAlign = TextAlign.Center
-            )
+            when (responseText.isEmpty()) {
+                true -> {
+                    Text(
+                        modifier = Modifier
+                            .padding(start = 16.dp, end = 16.dp, bottom = 150.dp)
+                            .fillMaxWidth()
+                            .align(Alignment.BottomCenter),
+                        text = "Tap the record button to start!",
+                        style = MaterialTheme.typography.displaySmall,
+                        color = MaterialTheme.colorScheme.onSurface,
+                        fontStyle = FontStyle.Italic,
+                        textAlign = TextAlign.Center
+                    )
+                }
+                false -> {
+                    Text(
+                        modifier = Modifier
+                            .padding(top = 128.dp, start = 16.dp, end = 16.dp)
+                            .fillMaxWidth()
+                            .align(Alignment.TopCenter),
+                        text = responseText,
+                        style = MaterialTheme.typography.displayLarge,
+                        textAlign = TextAlign.Center
+                    )
+                }
+            }
             RecordScreenButton(
                 modifier = Modifier
                     .padding(bottom = 32.dp)
                     .align(Alignment.BottomCenter),
-                onRecordClick = onRecordClick
-            )
-        }
-    }
-}
-
-@Composable
-fun RecordScreenButton(
-    modifier: Modifier,
-    onRecordClick: () -> Unit
-) {
-    Box(modifier = modifier) {
-        Button(
-            modifier = Modifier
-                .size(96.dp),
-            onClick = { onRecordClick() },
-            shape = CircleShape,
-            colors = ButtonDefaults.buttonColors(
-                containerColor = MaterialTheme.colorScheme.background,
-                contentColor = selectedBlue
-            )
-        ) {
-            Image(
-                modifier = Modifier
-                    .size(64.dp),
-                contentDescription = stringResource(R.string.description_record_button),
-                painter = painterResource(R.drawable.ic_arrow_up),
-                colorFilter = ColorFilter.tint(color = selectedBlue)
+                onRecordClick = onRecordButtonClicked
             )
         }
     }
@@ -103,7 +85,19 @@ fun RecordScreenButton(
 fun RecordScreenPreview() {
     TalkTheme(dynamicColor = false) {
         RecordScreen(
-            onRecordClick = { }
+            responseText = "THIS IS A VERY LONG AND ACCURATE TEST",
+            onRecordButtonClicked = { }
+        )
+    }
+}
+
+@Preview
+@Composable
+fun RecordScreenEmptyPreview() {
+    TalkTheme(dynamicColor = false) {
+        RecordScreen(
+            responseText = "",
+            onRecordButtonClicked = { }
         )
     }
 }

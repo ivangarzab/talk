@@ -23,6 +23,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.ivangarzab.course.CourseScreen
 import com.ivangarzab.record.RecordScreen
+import com.ivangarzab.record.RecordViewModel
 import com.ivangarzab.resources.ui.theme.TalkTheme
 import org.koin.androidx.compose.koinViewModel
 
@@ -87,8 +88,13 @@ fun MainNavHost(
             // In the real app, we would use the Day param for something.
             val dayId = backStackEntry.arguments?.getString("dayId") ?: ""
 
+            val recordViewModel: RecordViewModel = koinViewModel()
+
+            val responseText by recordViewModel.responseText.collectAsState()
+
             RecordScreen(
-                onRecordClick = { viewModel.startListeningForTextResponses() }
+                responseText = responseText,
+                onRecordButtonClicked = { recordViewModel.startListeningForTextResponses() }
             )
         }
     }

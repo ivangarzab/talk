@@ -5,6 +5,7 @@ import android.app.Application
 import android.util.Log
 import com.ivangarzab.data.di.dataModule
 import com.ivangarzab.data.network.NetworkRepository
+import com.ivangarzab.record.di.recordFeatureModule
 import com.ivangarzab.talk.di.appModule
 import org.koin.android.ext.android.inject
 import org.koin.android.ext.koin.androidContext
@@ -35,7 +36,7 @@ class App : Application() {
         startKoin {
             androidLogger()
             androidContext(this@App)
-            modules(listOf(appModule, dataModule))
+            modules(listOf(appModule, dataModule, recordFeatureModule))
         }
     }
 

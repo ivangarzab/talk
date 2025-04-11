@@ -72,10 +72,9 @@ class WebSocketRepository {
             header(HEADER_ACCESS_TOKEN, BuildConfig.WS_ACCESS_TOKEN)
             header(HEADER_CLIENT_INFO, FIELD_CLIENT_INFO)
         }.build()
-        openWebSocket()
     }
 
-    private fun openWebSocket() {
+    suspend fun openWebSocket() {
         Timber.v("Attempting to open web socket for url: $WEB_SOCKET_URL")
         webSocket = okHttpClient.newWebSocket(webSocketRequest, webSocketListener)
     }
