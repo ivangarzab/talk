@@ -13,7 +13,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -109,10 +108,4 @@ fun MainNavHost(
 object NavRoutes {
     const val COURSE = "course"
     const val RECORD = "record"
-}
-
-@Preview
-@Composable
-fun MainNavHostPreview() {
-    MainNavHost()
 }

@@ -72,7 +72,7 @@ fun defaultTypography(darkTheme: Boolean = isSystemInDarkTheme()): Typography {
             fontSize = 20.sp,
             lineHeight = 24.sp,
             letterSpacing = 0.5.sp,
-            color = colorScheme.onSurface
+            color = colorScheme.onBackground
         ),
         bodyMedium = TextStyle(
             fontFamily = FontFamily.Default,

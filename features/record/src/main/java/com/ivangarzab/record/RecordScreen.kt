@@ -1,5 +1,6 @@
 package com.ivangarzab.record
 
+import android.content.res.Configuration
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.repeatable
@@ -109,7 +110,18 @@ fun RecordScreen(
 @Preview
 @Composable
 fun RecordScreenPreview() {
-    TalkTheme(dynamicColor = false) {
+    TalkTheme {
+        RecordScreen(
+            responseText = "THIS IS A VERY LONG AND ACCURATE TEST",
+            onRecordButtonClicked = { }
+        )
+    }
+}
+
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Composable
+fun RecordScreenPreviewNight() {
+    TalkTheme {
         RecordScreen(
             responseText = "THIS IS A VERY LONG AND ACCURATE TEST",
             onRecordButtonClicked = { }
@@ -120,7 +132,18 @@ fun RecordScreenPreview() {
 @Preview
 @Composable
 fun RecordScreenEmptyPreview() {
-    TalkTheme(dynamicColor = false) {
+    TalkTheme {
+        RecordScreen(
+            responseText = "",
+            onRecordButtonClicked = { }
+        )
+    }
+}
+
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Composable
+fun RecordScreenEmptyPreviewNight() {
+    TalkTheme {
         RecordScreen(
             responseText = "",
             onRecordButtonClicked = { }

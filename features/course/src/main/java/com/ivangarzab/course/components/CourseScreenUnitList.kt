@@ -25,6 +25,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.ivangarzab.data.course.Day
 import com.ivangarzab.resources.R
+import com.ivangarzab.resources.ui.theme.TalkTheme
 import com.ivangarzab.data.course.Unit as CourseUnit
 
 /**
@@ -148,22 +149,26 @@ fun CourseScreenUnitListHeader(
 @Preview
 @Composable
 fun CourseScreenUnitListEmptyPreview() {
-    CourseScreenUnitList(
-        modifier = Modifier.background(color = MaterialTheme.colorScheme.background),
-        units = listOf(),
-        onUnitDayClick = { }
-    )
+    TalkTheme {
+        CourseScreenUnitList(
+            modifier = Modifier.background(color = MaterialTheme.colorScheme.background),
+            units = listOf(),
+            onUnitDayClick = { }
+        )
+    }
 }
 
 @Preview
 @Composable
 fun CourseScreenUnitListPreview() {
-    CourseScreenUnitList(
-        modifier = Modifier.background(color = MaterialTheme.colorScheme.background),
-        units = listOf(
-            CourseUnit("1", "Unit 1 Description", listOf(Day("1.1", "Learning Objective", "Some Topic", "Additional Info"), Day("1.2", "Learning Objective", "Some Topic", "Additional Info"))),
-            CourseUnit("2", "Unit 2 Description", listOf(Day("2.1", "Learning Objective", "Some Topic", "Additional Info"))),
-        ),
-        onUnitDayClick = { }
-    )
+    TalkTheme {
+        CourseScreenUnitList(
+            modifier = Modifier.background(color = MaterialTheme.colorScheme.background),
+            units = listOf(
+                CourseUnit("1", "Unit 1 Description", listOf(Day("1.1", "Learning Objective", "Some Topic", "Additional Info"), Day("1.2", "Learning Objective", "Some Topic", "Additional Info"))),
+                CourseUnit("2", "Unit 2 Description", listOf(Day("2.1", "Learning Objective", "Some Topic", "Additional Info"))),
+            ),
+            onUnitDayClick = { }
+        )
+    }
 }
