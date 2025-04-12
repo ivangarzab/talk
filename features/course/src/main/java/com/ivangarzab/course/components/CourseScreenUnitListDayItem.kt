@@ -1,7 +1,9 @@
 package com.ivangarzab.course.components
 
+import android.content.res.Configuration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -29,6 +31,7 @@ import androidx.constraintlayout.compose.Dimension
 import coil3.compose.AsyncImage
 import com.ivangarzab.data.course.Day
 import com.ivangarzab.resources.R
+import com.ivangarzab.resources.ui.theme.TalkTheme
 import com.ivangarzab.resources.ui.theme.selectedBlue
 
 /**
@@ -109,33 +112,23 @@ fun CourseScreenUnitListDayItem(
             )
         }
         // Right side
-        ConstraintLayout(
+        Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .size(150.dp)
                 .padding(start = 16.dp, end = 8.dp, top = 8.dp, bottom = 8.dp)
-                .shadow(
-                    elevation = 1.dp,
-                    shape = RoundedCornerShape(16.dp)
-                )
                 .background(
                     color = MaterialTheme.colorScheme.surface,
                     shape = RoundedCornerShape(16.dp)
                 )
                 .align(Alignment.CenterVertically)
         ) {
-            val (image, title, subtitle) = createRefs()
-
             Box(
                 modifier = Modifier
-                    .constrainAs(image) {
-                        top.linkTo(parent.top)
-                        bottom.linkTo(parent.bottom)
-                        start.linkTo(parent.start)
-                    }
                     .padding(start = 8.dp)
                     .size(80.dp)
-                    .background(MaterialTheme.colorScheme.background, shape = CircleShape),
+                    .background(MaterialTheme.colorScheme.background, shape = CircleShape)
+                    .align(Alignment.CenterVertically)
             ) {
                 AsyncImage(
                     modifier = Modifier
@@ -149,57 +142,79 @@ fun CourseScreenUnitListDayItem(
                     fallback = painterResource(id = R.drawable.profile_placeholder)
                 )
             }
-            Text(
+            Column(
                 modifier = Modifier
-                    .padding(start = 8.dp, top = 8.dp)
-                    .constrainAs(title) {
-                        top.linkTo(parent.top)
-                        start.linkTo(image.end)
-                        end.linkTo(parent.end)
-                        bottom.linkTo(subtitle.top)
-                        horizontalBias = 0f
-                        width = Dimension.fillToConstraints
-                    },
-                text = day.title,
-                style = MaterialTheme.typography.bodyLarge,
-            )
-            Text(
-                modifier = Modifier
-                    .padding(start = 8.dp, bottom = 8.dp)
-                    .constrainAs(subtitle) {
-                        top.linkTo(title.bottom)
-                        start.linkTo(image.end)
-                        end.linkTo(parent.end)
-                        bottom.linkTo(parent.bottom)
-                        horizontalBias = 0f
-                        width = Dimension.fillToConstraints
-                    },
-                text = day.subtitle,
-                style = MaterialTheme.typography.bodySmall
-            )
+                    .padding(start = 8.dp, end = 8.dp)
+                    .align(Alignment.CenterVertically),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                Text(
+                    modifier = Modifier
+                        .padding(start = 8.dp, top = 8.dp),
+                    text = day.title,
+                    style = MaterialTheme.typography.bodyLarge,
+                )
+                Text(
+                    modifier = Modifier
+                        .padding(start = 8.dp, bottom = 8.dp),
+                    text = day.subtitle,
+                    style = MaterialTheme.typography.bodySmall
+                )
+            }
         }
+    }
+}
+
+@Composable
+fun CourseScreenUnitListItemDayPreview() {
+    TalkTheme {
+        CourseScreenUnitListDayItem(
+            modifier = Modifier.background(color = MaterialTheme.colorScheme.background),
+            index = 0,
+            day = Day("1", "Learning Objective", "Some Topic", "Additional Info"),
+            onUnitDayClick = { }
+        )
     }
 }
 
 @Preview
 @Composable
-fun CourseScreenUnitListItemDayPreview() {
-    CourseScreenUnitListDayItem(
-        modifier = Modifier.background(color = MaterialTheme.colorScheme.background),
-        index = 0,
-        day = Day("1", "Learning Objective", "Some Topic", "Additional Info"),
-        onUnitDayClick = { }
-    )
+fun CourseScreenUnitListItemDayNonFirstAndSelectedPreview() {
+    TalkTheme {
+        CourseScreenUnitListDayItem(
+            modifier = Modifier.background(color = MaterialTheme.colorScheme.background),
+            index = 6,
+            day = Day("1", "Learning Objective", "Some Topic", "Additional Info"),
+            selected = true,
+            onUnitDayClick = { }
+        )
+    }
 }
 
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Composable
+fun CourseScreenUnitListItemDayPreviewNight() {
+    TalkTheme {
+        CourseScreenUnitListDayItem(
+            modifier = Modifier.background(color = MaterialTheme.colorScheme.background),
+            index = 0,
+            day = Day("1", "Learning Objective", "Some Topic", "Additional Info"),
+            onUnitDayClick = { }
+        )
+    }
+}
+
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Preview
 @Composable
-fun CourseScreenUnitListItemDayNonFirstAndSelectedPreview() {
-    CourseScreenUnitListDayItem(
-        modifier = Modifier.background(color = MaterialTheme.colorScheme.background),
-        index = 6,
-        day = Day("1", "Learning Objective", "Some Topic", "Additional Info"),
-        selected = true,
-        onUnitDayClick = { }
-    )
+fun CourseScreenUnitListItemDayNonFirstAndSelectedPreviewNight() {
+    TalkTheme {
+        CourseScreenUnitListDayItem(
+            modifier = Modifier.background(color = MaterialTheme.colorScheme.background),
+            index = 6,
+            day = Day("1", "Learning Objective", "Some Topic", "Additional Info"),
+            selected = true,
+            onUnitDayClick = { }
+        )
+    }
 }

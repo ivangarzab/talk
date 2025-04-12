@@ -1,16 +1,16 @@
-package com.ivangarzab.talk.di
+package com.ivangarzab.course.di
 
+import com.ivangarzab.course.CourseViewModel
 import com.ivangarzab.data.course.CourseRepository
-import com.ivangarzab.talk.ui.MainScreenViewModel
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 
 /**
- * [org.koin.core.Koin] dependency module for injection from the app layer.
+ * [org.koin.core.Koin] dependency module for injection of the course feature.
  */
-val appModule = module {
+val courseFeatureModule = module {
     viewModel {
-        MainScreenViewModel(
+        CourseViewModel(
             courseRepository = get(CourseRepository::class)
         )
     }

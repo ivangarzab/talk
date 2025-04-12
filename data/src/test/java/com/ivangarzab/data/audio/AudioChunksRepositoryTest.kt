@@ -1,6 +1,7 @@
 package com.ivangarzab.data.audio
 
 import com.ivangarzab.data.network.NetworkRepository
+import com.ivangarzab.websocket.models.AudioChunk
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every

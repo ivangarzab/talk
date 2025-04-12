@@ -1,5 +1,10 @@
 package com.ivangarzab.record
 
+import android.content.res.Configuration
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.repeatable
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -10,6 +15,11 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontStyle
@@ -29,6 +39,23 @@ fun RecordScreen(
     responseText: String = "",
     onRecordButtonClicked: () -> Unit
 ) {
+    // State to trigger the button's jumping animation
+    var shouldAnimate by remember { mutableStateOf(false) }
+    // Vertical offset for the jumping animation
+    val verticalOffset by animateDpAsState(
+        targetValue = if (shouldAnimate) (-20).dp else 0.dp,
+        animationSpec = repeatable(
+            iterations = 3,
+            animation = tween(durationMillis = 450),
+            repeatMode = RepeatMode.Reverse
+        ),
+        label = "buttonJumpAnimation"
+    )
+
+    LaunchedEffect(Unit) {
+        shouldAnimate = true
+    }
+
     Box(
         modifier = modifier
             .statusBarsPadding()
@@ -72,7 +99,7 @@ fun RecordScreen(
             }
             RecordScreenButton(
                 modifier = Modifier
-                    .padding(bottom = 32.dp)
+                    .padding(bottom = 42.dp + verticalOffset)
                     .align(Alignment.BottomCenter),
                 onRecordClick = onRecordButtonClicked
             )
@@ -83,7 +110,18 @@ fun RecordScreen(
 @Preview
 @Composable
 fun RecordScreenPreview() {
-    TalkTheme(dynamicColor = false) {
+    TalkTheme {
+        RecordScreen(
+            responseText = "THIS IS A VERY LONG AND ACCURATE TEST",
+            onRecordButtonClicked = { }
+        )
+    }
+}
+
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Composable
+fun RecordScreenPreviewNight() {
+    TalkTheme {
         RecordScreen(
             responseText = "THIS IS A VERY LONG AND ACCURATE TEST",
             onRecordButtonClicked = { }
@@ -94,7 +132,18 @@ fun RecordScreenPreview() {
 @Preview
 @Composable
 fun RecordScreenEmptyPreview() {
-    TalkTheme(dynamicColor = false) {
+    TalkTheme {
+        RecordScreen(
+            responseText = "",
+            onRecordButtonClicked = { }
+        )
+    }
+}
+
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Composable
+fun RecordScreenEmptyPreviewNight() {
+    TalkTheme {
         RecordScreen(
             responseText = "",
             onRecordButtonClicked = { }

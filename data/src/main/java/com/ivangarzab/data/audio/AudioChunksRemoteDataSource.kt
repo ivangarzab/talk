@@ -3,6 +3,7 @@ package com.ivangarzab.data.audio
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.ivangarzab.data.util.JsonLoader
+import com.ivangarzab.websocket.models.AudioChunk
 
 /**
  * The purpose of this class is to handle remote data source operations for [AudioChunk].

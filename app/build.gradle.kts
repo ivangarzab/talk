@@ -43,8 +43,8 @@ dependencies {
 
     implementation(project(":resources"))
     implementation(project(":data"))
-    implementation(project(":course"))
-    implementation(project(":record"))
+    implementation(project(":feature:course"))
+    implementation(project(":feature:record"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)

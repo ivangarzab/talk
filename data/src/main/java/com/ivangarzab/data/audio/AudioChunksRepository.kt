@@ -1,6 +1,7 @@
 package com.ivangarzab.data.audio
 
 import com.ivangarzab.data.network.NetworkRepository
+import com.ivangarzab.websocket.models.AudioChunk
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

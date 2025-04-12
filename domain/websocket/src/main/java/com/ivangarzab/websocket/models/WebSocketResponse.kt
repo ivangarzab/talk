@@ -1,4 +1,4 @@
-package com.ivangarzab.data.network
+package com.ivangarzab.websocket.models
 
 import com.google.gson.annotations.SerializedName
 

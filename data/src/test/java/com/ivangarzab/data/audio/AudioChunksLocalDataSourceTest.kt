@@ -1,5 +1,6 @@
 package com.ivangarzab.data.audio
 
+import com.ivangarzab.websocket.models.AudioChunk
 import io.mockk.MockKAnnotations
 import junit.framework.TestCase.assertEquals
 import kotlinx.coroutines.runBlocking

@@ -1,5 +1,7 @@
 package com.ivangarzab.data.audio
 
+import com.ivangarzab.websocket.models.AudioChunk
+
 /**
  * The purpose of this class is to handle the local data source operations for [AudioChunk].
  *

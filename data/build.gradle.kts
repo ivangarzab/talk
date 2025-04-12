@@ -40,6 +40,8 @@ android {
 }
 
 dependencies {
+    implementation(project(":domain:websocket"))
+
     implementation(libs.gson)
     implementation(libs.timber)
     implementation(libs.koin)

@@ -1,4 +1,4 @@
-package com.ivangarzab.talk.ui
+package com.ivangarzab.talk
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -13,7 +13,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -22,6 +21,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.ivangarzab.course.CourseScreen
+import com.ivangarzab.course.CourseViewModel
 import com.ivangarzab.record.RecordScreen
 import com.ivangarzab.record.RecordViewModel
 import com.ivangarzab.resources.ui.theme.TalkTheme
@@ -61,15 +61,16 @@ fun MainNavHost(
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController()
 ) {
-    val viewModel: MainScreenViewModel = koinViewModel()
-
     NavHost(
         navController = navController,
         startDestination = NavRoutes.COURSE,
         modifier = modifier
     ) {
+        // CourseScreen stateful definition
         composable(NavRoutes.COURSE) {
-            val courseData by viewModel.courseData.collectAsState()
+            val courseViewModel: CourseViewModel = koinViewModel()
+
+            val courseData by courseViewModel.courseData.collectAsState()
 
             courseData?.let { course ->
                 CourseScreen(
@@ -81,11 +82,12 @@ fun MainNavHost(
             }
         }
 
+        // RecordScreen stateful definition
         composable(
             route = "${NavRoutes.RECORD}/{dayId}",
             arguments = listOf(navArgument("dayId") { type = NavType.StringType })
         ) { backStackEntry ->
-            // In the real app, we would use the Day param for something.
+            //TODO: In the real app, we would use the Day param for something
             val dayId = backStackEntry.arguments?.getString("dayId") ?: ""
 
             val recordViewModel: RecordViewModel = koinViewModel()
@@ -94,7 +96,7 @@ fun MainNavHost(
 
             RecordScreen(
                 responseText = responseText,
-                onRecordButtonClicked = { recordViewModel.startListeningForTextResponses() }
+                onRecordButtonClicked = { recordViewModel.onStreamingSessionStarted() }
             )
         }
     }
@@ -106,10 +108,4 @@ fun MainNavHost(
 object NavRoutes {
     const val COURSE = "course"
     const val RECORD = "record"
-}
-
-@Preview
-@Composable
-fun MainNavHostPreview() {
-    MainNavHost()
 }

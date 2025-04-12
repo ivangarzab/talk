@@ -1,5 +1,6 @@
 package com.ivangarzab.course
 
+import android.content.res.Configuration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.MaterialTheme
@@ -47,7 +48,7 @@ fun CourseScreenEmptyPreview() {
     TalkTheme {
         CourseScreen(
             modifier = Modifier.background(color = MaterialTheme.colorScheme.background),
-            course = Course("Example Course", Info("Course Title", "Course Subtitle", "Course Description", "Course Author"), listOf()),
+            course = mockEmptyCourse,
             onUnitDayClick = { }
         )
     }
@@ -59,26 +60,42 @@ fun CourseScreenPreview() {
     TalkTheme {
         CourseScreen(
             modifier = Modifier.background(color = MaterialTheme.colorScheme.background),
-            course = Course(
-                id = "Example Course",
-                info = Info("Course Title", "Course Subtitle", "Course Description", "Course Author"),
-                units = listOf(
-                    CourseUnit(
-                        "1", "Unit 1 Description",
-                        listOf(
-                            Day("1.1", "Learning Objective", "Some Topic", "Additional Info"),
-                            Day("1.2", "Learning Objective", "Some Topic", "Additional Info")
-                        )
-                    ),
-                    CourseUnit(
-                        "2", "Unit 2 Description",
-                        listOf(
-                            Day("2.1", "Learning Objective", "Some Topic", "Additional Info")
-                        )
-                    ),
-                )
-            ),
+            course = mockCourse,
             onUnitDayClick = { }
         )
     }
 }
+
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Composable
+fun CourseScreenPreviewNight() {
+    TalkTheme {
+        CourseScreen(
+            modifier = Modifier.background(color = MaterialTheme.colorScheme.background),
+            course = mockCourse,
+            onUnitDayClick = { }
+        )
+    }
+}
+
+val mockEmptyCourse: Course = Course("Example Course", Info("Course Title", "Course Subtitle", "Course Description", "Course Author"), listOf())
+
+val mockCourse: Course = Course(
+    id = "Example Course",
+    info = Info("Course Title", "Course Subtitle", "Course Description", "Course Author"),
+    units = listOf(
+        CourseUnit(
+            "1", "Unit 1 Description",
+            listOf(
+                Day("1.1", "Learning Objective", "Some Topic", "Additional Info"),
+                Day("1.2", "Learning Objective", "Some Topic", "Additional Info")
+            )
+        ),
+        CourseUnit(
+            "2", "Unit 2 Description",
+            listOf(
+                Day("2.1", "Learning Objective", "Some Topic", "Additional Info")
+            )
+        ),
+    )
+)

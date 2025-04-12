@@ -3,7 +3,10 @@ package com.ivangarzab.data.network
 import android.annotation.SuppressLint
 import com.google.gson.Gson
 import com.ivangarzab.data.BuildConfig
-import com.ivangarzab.data.audio.AudioChunk
+import com.ivangarzab.websocket.repositories.WebSocketRepository
+import com.ivangarzab.websocket.models.AudioChunk
+import com.ivangarzab.websocket.models.WebSocketResponse
+import com.ivangarzab.websocket.models.WebSocketResponseType
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -19,7 +22,7 @@ import java.util.concurrent.TimeUnit
  * The purpose of this repository is to handle the [WebSocket] connection that is used to
  * send and receive data from the backend server, regarding the record feature.
  */
-class WebSocketRepository {
+class WebSocketRepositoryImpl : WebSocketRepository {
 
     // In theory, this client should be created with a [Network] object from a [NetworkCallback].
     private val okHttpClient: OkHttpClient
@@ -76,17 +79,8 @@ class WebSocketRepository {
     }
 
     /**
-     * Open a [WebSocket] for the [WEB_SOCKET_URL], using the predefined [okHttpClient]
-     * and [webSocketRequest] to establish a connection.
-     */
-    suspend fun openWebSocket() {
-        Timber.v("Attempting to open web socket for url: $WEB_SOCKET_URL")
-        webSocket = okHttpClient.newWebSocket(webSocketRequest, webSocketListener)
-    }
-
-    /**
-     * Decipher the raw [WebSocketResponse] from the provided text using [Gson],
-     * and update the internal [_webSocketResponses] state with the parsed response.
+     * Decipher the raw [WebSocketResponse] from the provided text
+     * using [Gson], and update the internal [_webSocketResponses] state with the parsed response.
      */
     private fun onWebSocketRawResponseReceived(text: String) {
         val response = Gson().fromJson(text, WebSocketResponse::class.java)
@@ -95,39 +89,42 @@ class WebSocketRepository {
 
     private fun handleWebSocketResponse(response: WebSocketResponse) {
         when (response.type) {
-            WebSocketResponseType.METADATA -> {
-                Timber.v("Received START response from web socket")
-                // We could send back a signal to indicate that we can/should
-                //  start sending audio chunks.
-            }
-
-            WebSocketResponseType.RESULT -> {
-                Timber.v("Received RESULT response from web socket")
-                _webSocketResponses.value += response
-            }
-
+            WebSocketResponseType.METADATA -> "START"
+            WebSocketResponseType.RESULT -> "RESULT"
             WebSocketResponseType.CLOSED -> {
-                Timber.v("Received CLOSED response from web socket")
-                webSocket?.close(
-                    1000,
-                    "Web socket connection closed after end of stream."
-                )
+                // Close the web socket to release all resources
+                webSocket?.close(1000, "Web socket connection closed after end of stream.")
+                "CLOSED"
             }
+        }.let { type: String ->
+            Timber.v("Received $type response from web socket")
         }
+        _webSocketResponses.value += response
     }
 
     /**
      * Consume a [StateFlow] of a list of [WebSocketResponse].
      */
-    fun listenForWebSocketResponses(): StateFlow<List<WebSocketResponse>> {
+    override fun listenForWebSocketResponses(): StateFlow<List<WebSocketResponse>> {
         return _webSocketResponses.asStateFlow()
+    }
+
+    /**
+     * Open a [WebSocket] for the [WEB_SOCKET_URL], using the predefined [okHttpClient]
+     * and [webSocketRequest] to establish a connection.
+     */
+    override suspend fun openWebSocket() {
+        // Make sure the new web socket starts with a blank slate
+        _webSocketResponses.value = emptyList()
+        Timber.v("Attempting to open web socket for url: $WEB_SOCKET_URL")
+        webSocket = okHttpClient.newWebSocket(webSocketRequest, webSocketListener)
     }
 
     /**
      * Send a message to the web socket to indicate the backend that we want to star recording.
      */
     @SuppressLint("DefaultLocale")
-    suspend fun sendStartStreamingMessage(learningLocale: String = "en-US", inputSampleRate: Int = 16000) {
+    override suspend fun sendStartStreamingMessage(learningLocale: String, inputSampleRate: Int) {
         webSocket?.let { ws ->
             ws.send(String.format(START_MESSAGE, learningLocale, inputSampleRate))
             Timber.v("Start message sent to web socket with learning locale: $learningLocale and input sample rate: $inputSampleRate")
@@ -137,7 +134,7 @@ class WebSocketRepository {
     /**
      * Send an [AudioChunk] to the web socket for backend processing.
      */
-    suspend fun sendAudioDataChunkMessage(audioChunk: AudioChunk) {
+    override suspend fun sendAudioDataChunkMessage(audioChunk: AudioChunk) {
         webSocket?.let { ws ->
             ws.send(String.format(AUDIO_CHUNK_MESSAGE, audioChunk.chunk, audioChunk.isFinal))
             if (audioChunk.isFinal) {
