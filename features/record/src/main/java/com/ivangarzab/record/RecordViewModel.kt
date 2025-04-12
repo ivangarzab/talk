@@ -3,8 +3,8 @@ package com.ivangarzab.record
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ivangarzab.data.audio.AudioChunksRepository
-import com.ivangarzab.data.network.WebSocketRepositoryImpl
 import com.ivangarzab.websocket.models.WebSocketResponse
+import com.ivangarzab.websocket.models.WebSocketResponseType
 import com.ivangarzab.websocket.usecases.ObserveWebSocketResponseUseCase
 import com.ivangarzab.websocket.usecases.SendAudioChunkUseCase
 import com.ivangarzab.websocket.usecases.StartWebSocketUseCase
@@ -34,22 +34,41 @@ class RecordViewModel(
 
     fun startListeningForTextResponses() {
         viewModelScope.launch(Dispatchers.Default) {
+            // Clean up responseText in case this is not the first time we start a streaming session
+            _responseText.value = ""
             startWebSocketUseCase(learningLocale = "en-US") // Using default inputSampleRate
-            for (audioChunk in audioChunksData.value) {
-                sendAudioChunkUseCase(audioChunk)
-            }
         }
         viewModelScope.launch(Dispatchers.Default) {
             webSocketResponsesData.collect { response: List<WebSocketResponse> ->
                 response.lastOrNull()?.let { latest ->
-                    Timber.d("Got a new web socket response: $latest")
-                    // Given that we're using Gson to parse the incoming JSON,
-                    //  latest.text may indeed be null, in spite of what Android Studio thinks!
-                    if (latest.text != null && latest.text.isNotEmpty()) {
-                        Timber.i("Received text response from web socket: ${latest.text}")
-                        _responseText.value = latest.text
+                    when (latest.type) {
+                        WebSocketResponseType.METADATA -> {
+                            // We can start sending audio chunks
+                            Timber.d("Streaming session has started")
+                            sendAudioChunks()
+                        }
+                        WebSocketResponseType.RESULT -> {
+                            // Given that we're using Gson to parse the incoming JSON,
+                            //  latest.text may indeed be null, in spite of what Android Studio thinks!
+                            if (latest.text != null && latest.text.isNotEmpty()) {
+                                Timber.d("Received text response from web socket: ${latest.text}")
+                                _responseText.value = latest.text
+                            }
+                        }
+                        WebSocketResponseType.CLOSED -> {
+                            Timber.d("Streaming session has ended")
+                        }
                     }
                 }
+            }
+        }
+    }
+
+    private fun sendAudioChunks() {
+        Timber.d("Sending all audio chunks at once")
+        viewModelScope.launch(Dispatchers.Default) {
+            for (audioChunk in audioChunksData.value) {
+                sendAudioChunkUseCase(audioChunk)
             }
         }
     }

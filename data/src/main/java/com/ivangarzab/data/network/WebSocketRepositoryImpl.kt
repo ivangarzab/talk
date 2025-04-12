@@ -89,25 +89,17 @@ class WebSocketRepositoryImpl : WebSocketRepository {
 
     private fun handleWebSocketResponse(response: WebSocketResponse) {
         when (response.type) {
-            WebSocketResponseType.METADATA -> {
-                Timber.v("Received START response from web socket")
-                // We could send back a signal to indicate that we can/should
-                //  start sending audio chunks.
-            }
-
-            WebSocketResponseType.RESULT -> {
-                Timber.v("Received RESULT response from web socket")
-                _webSocketResponses.value += response
-            }
-
+            WebSocketResponseType.METADATA -> "START"
+            WebSocketResponseType.RESULT -> "RESULT"
             WebSocketResponseType.CLOSED -> {
-                Timber.v("Received CLOSED response from web socket")
-                webSocket?.close(
-                    1000,
-                    "Web socket connection closed after end of stream."
-                )
+                // Close the web socket to release all resources
+                webSocket?.close(1000, "Web socket connection closed after end of stream.")
+                "CLOSED"
             }
+        }.let { type: String ->
+            Timber.v("Received $type response from web socket")
         }
+        _webSocketResponses.value += response
     }
 
     /**
