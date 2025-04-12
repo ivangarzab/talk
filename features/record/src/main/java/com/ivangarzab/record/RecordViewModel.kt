@@ -9,6 +9,7 @@ import com.ivangarzab.websocket.usecases.ObserveWebSocketResponseUseCase
 import com.ivangarzab.websocket.usecases.SendAudioChunkUseCase
 import com.ivangarzab.websocket.usecases.StartWebSocketUseCase
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -25,6 +26,11 @@ class RecordViewModel(
     val sendAudioChunkUseCase: SendAudioChunkUseCase
 ) : ViewModel() {
 
+    // Properties to track coroutine Jobs that need to be cancelled for subsequent runs
+    private var webSocketSetupJob: Job? = null
+    private var webSocketListeningJob: Job? = null
+    private var audioChunksJob: Job? = null
+
     private val audioChunksData = audioChunksRepository.listenForAudioChunks()
 
     private val webSocketResponsesData = observeWebSocketResponseUseCase()
@@ -32,20 +38,21 @@ class RecordViewModel(
     private val _responseText: MutableStateFlow<String> = MutableStateFlow("")
     val responseText: StateFlow<String> = _responseText
 
-    fun startListeningForTextResponses() {
-        viewModelScope.launch(Dispatchers.Default) {
+    fun onStreamingSessionStarted() {
+        webSocketSetupJob =viewModelScope.launch(Dispatchers.Default) {
             // Clean up responseText in case this is not the first time we start a streaming session
             _responseText.value = ""
             startWebSocketUseCase(learningLocale = "en-US") // Using default inputSampleRate
         }
-        viewModelScope.launch(Dispatchers.Default) {
+
+        webSocketListeningJob = viewModelScope.launch(Dispatchers.Default) {
             webSocketResponsesData.collect { response: List<WebSocketResponse> ->
                 response.lastOrNull()?.let { latest ->
                     when (latest.type) {
                         WebSocketResponseType.METADATA -> {
                             // We can start sending audio chunks
                             Timber.d("Streaming session has started")
-                            sendAudioChunks()
+                            onSendStreamingSessionAudioChunks()
                         }
                         WebSocketResponseType.RESULT -> {
                             // Given that we're using Gson to parse the incoming JSON,
@@ -57,6 +64,7 @@ class RecordViewModel(
                         }
                         WebSocketResponseType.CLOSED -> {
                             Timber.d("Streaming session has ended")
+                            onStreamingSessionEnded()
                         }
                     }
                 }
@@ -64,12 +72,29 @@ class RecordViewModel(
         }
     }
 
-    private fun sendAudioChunks() {
+    private fun onSendStreamingSessionAudioChunks() {
         Timber.d("Sending all audio chunks at once")
-        viewModelScope.launch(Dispatchers.Default) {
+        audioChunksJob = viewModelScope.launch(Dispatchers.Default) {
             for (audioChunk in audioChunksData.value) {
                 sendAudioChunkUseCase(audioChunk)
             }
         }
+    }
+
+    private fun onStreamingSessionEnded() {
+        // Cancel all coroutine jobs once we're done streaming
+        webSocketSetupJob?.cancel()
+        webSocketListeningJob?.cancel()
+        audioChunksJob?.cancel()
+
+        // Reset job references for potential reuse
+        webSocketSetupJob = null
+        webSocketListeningJob = null
+        audioChunksJob = null
+    }
+
+    override fun onCleared() {
+        onStreamingSessionEnded()
+        super.onCleared()
     }
 }

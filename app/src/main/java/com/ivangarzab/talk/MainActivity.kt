@@ -96,7 +96,7 @@ fun MainNavHost(
 
             RecordScreen(
                 responseText = responseText,
-                onRecordButtonClicked = { recordViewModel.startListeningForTextResponses() }
+                onRecordButtonClicked = { recordViewModel.onStreamingSessionStarted() }
             )
         }
     }

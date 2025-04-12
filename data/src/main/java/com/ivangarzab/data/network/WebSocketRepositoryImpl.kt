@@ -114,6 +114,8 @@ class WebSocketRepositoryImpl : WebSocketRepository {
      * and [webSocketRequest] to establish a connection.
      */
     override suspend fun openWebSocket() {
+        // Make sure the new web socket starts with a blank slate
+        _webSocketResponses.value = emptyList()
         Timber.v("Attempting to open web socket for url: $WEB_SOCKET_URL")
         webSocket = okHttpClient.newWebSocket(webSocketRequest, webSocketListener)
     }
